@@ -1,0 +1,54 @@
+# GoReleaser configuration: https://goreleaser.com
+version: 2
+project_name: hestia-nginx-tui
+
+builds:
+  - id: hestia-nginx-tui
+    main: .
+    binary: hestia-nginx-tui
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    # hestia-nginx-tui_1.2.3_linux_amd64.tar.gz  (install.sh and `update` rely on this name)
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "Merge pull request"
+
+release:
+  github:
+    owner: onlinedigital
+    name: hestia-nginx-tui
+  footer: |
+    ## Install / update
+
+    ```sh
+    curl -fsSL https://raw.githubusercontent.com/onlinedigital/hestia-nginx-tui/main/install.sh | sudo bash
+    ```
+
+    Already installed? Run `sudo hestia-nginx-tui update` (or press `Ctrl+U` inside the TUI).

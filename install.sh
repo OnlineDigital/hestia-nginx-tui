@@ -82,6 +82,7 @@ chmod +x "$DEST/$BIN"
 say "installed $DEST/$BIN ($TAG)"
 case ":$PATH:" in
   *":$DEST:"*) ;;
+  # shellcheck disable=SC2016  # the literal $PATH in the hint is intentional
   *) printf '\033[1;33mnote:\033[0m %s is not in your PATH; add it, e.g.  export PATH="%s:$PATH"\n' "$DEST" "$DEST" ;;
 esac
 echo
